@@ -1,7 +1,7 @@
 CC=gcc
 OPCOES_COMPILADOR=-I. -I/usr/include/SOIL -lglut -lGLU -lSOIL -lGLEW -lGL -lm -lstdc++
 TODOS_ARQUIVOS_PONTOH =
-TODOS_ARQUIVOS_OBJ = main.o
+TODOS_ARQUIVOS_OBJ = main.o texto.o
 
 %.o: ../%.cpp $(TODOS_ARQUIVOS_PONTOH)
 	$(CC) -o $@ -c $< $(OPCOES_COMPILADOR)
