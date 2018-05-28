@@ -1,16 +1,27 @@
-CC=gcc
-OPCOES_COMPILADOR=-I. -I/usr/include/SOIL -lglut -lGLU -lSOIL -lGLEW -lGL -lm -lstdc++
-TODOS_ARQUIVOS_PONTOH =
-TODOS_ARQUIVOS_OBJ = main.o texto.o
+CC=g++
+OPCOES_COMPILADOR=-I./lib -I/usr/include/SOIL -lglut -lSDL_mixer -lGLU -lSOIL -lGLEW -lSDL -lGL -lm -lstdc++ -w
+LIB=../lib/
+SRC=../src/
 
-%.o: ../%.cpp $(TODOS_ARQUIVOS_PONTOH)
+TODOS_ARQUIVOS_PONTOH =
+TODOS_ARQUIVOS_OBJ = $(SRC)main.o $(LIB)texto.o $(LIB)config.o $(LIB)texturas.o 
+
+$(LIB)%.o: $(LIB)%.cpp
+	@echo "Compilando as bibliotecas.."
+	$(CC) -o $@ -c $< $(OPCOES_COMPILADOR)
+
+$(SRC)%.o: $(SRC)%.cpp
+	@echo "Compilando componentes do jogo.."
 	$(CC) -o $@ -c $< $(OPCOES_COMPILADOR)
 
 all: $(TODOS_ARQUIVOS_OBJ)
-	gcc -o main $^ $(OPCOES_COMPILADOR)
+	$(CC) -o main $^ $(OPCOES_COMPILADOR)
 
 run: all
-	(cd .. && exec Makefile/main)
+	@./main
 
 clean:
-	rm *.o main
+	@rm -f main
+	@rm -f *.o
+	@rm -f ../src/*.o
+	@rm -f ../lib/*.o
