@@ -82,6 +82,16 @@ void informacoes(coords olhoCamera,coords centroCamera,coords upCamera ){
     escreveTextoNaTela((void*)font, theStringBuffer);
     glRasterPos3f(2.7, 2.0, -2.0);
     escreveTextoNaTela((void*)font, (char*)"s");
+    
+    glRasterPos3f(2.0, 1.9, -2.0);
+    escreveTextoNaTela((void*)font, (char*)"Inicio : ");
+    floatParaString(theStringBuffer, 4, inicioT);
+    escreveTextoNaTela((void*)font, theStringBuffer);
+    glRasterPos3f(2.0, 1.7, -2.0);
+    escreveTextoNaTela((void*)font, (char*)"Fim : ");
+    floatParaString(theStringBuffer, 4, fimTardis);
+    escreveTextoNaTela((void*)font, theStringBuffer);
+
 }
 void info_planeta(){
     float perimetro = 2*3.14* sqrt((pow(distanciaX[c_planeta],2)+

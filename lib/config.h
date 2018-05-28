@@ -31,6 +31,8 @@ typedef struct material {
    cor especular;
    float brilhosidade[1];
 } material;
+extern int controlaTardis;
+extern float inicioT,fimTardis;
 extern float escala;
 extern bool OrbsOn;
 extern bool PlanOn;

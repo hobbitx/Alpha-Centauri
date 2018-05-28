@@ -17,6 +17,7 @@ using namespace std;
 
 int volume_musica=100;
 Mix_Music *musicMenu=NULL;
+
 static bool light0Ligada = 1; 
 static bool localViewer = false;            
 static float d = 1;           // Intensidade da cor difusa da luz branca
@@ -24,8 +25,7 @@ static float e = 1;           // Intensidade da cor especular da luz branca
 static float m = 0.3;           // Intensidade da luz ambiente global
 static float p = 1.0;           // A luz branca é posicional?
 static float s = 50.0;          // Expoente especular do material (shininess)
-static float anguloEsferaY = 0,anguloPlaneta = 0;
-    
+static float anguloEsferaY = 0,anguloPlaneta = 0;   
 static int esferaLados = 200;  
 int listOrbitas=0,contador=0,momentoAnterior;
 const int qtdPlanetas=5;
@@ -365,7 +365,7 @@ void desenhaCena(){
        if (zoom>2)zoom=2;
        if (zoom<1)zoom=1;
     }
-    if(c_planeta<5){
+    if(c_planeta<5 && controlaTardis==1){
        upCamera.x=0;
        upCamera.y=1;
        upCamera.z=0;
@@ -375,7 +375,14 @@ void desenhaCena(){
     }
     fps = 1000.0f / MAX(delta, 1.0f);
     momentoAnterior = momentoAtual;
-   
+    if(inicioT>=fimTardis && controlaTardis==0){
+        parar_musica();
+        controlaTardis=1;
+        iniciar_musica(musicas[c_planeta]);
+    }else{
+        inicioT+=0.1;
+    }
+    //printf("%.2f ",inicioT);
    glutSwapBuffers();
 }
 void changeCamera(){
@@ -407,6 +414,9 @@ void changeCamera(){
 }
 void changePlanet(){
     parar_musica();
+    inicioT=tempo;
+    fimTardis=inicioT+20;
+    controlaTardis=0;
     centroCamera.x = 0;
     centroCamera.y = 0;
     centroCamera.z = 0;
@@ -423,7 +433,8 @@ void changePlanet(){
     }
     olhoCamera.y=0;
     camera=4;
-     iniciar_musica(musicas[c_planeta]);
+    iniciar_musica("../musicas/tardis.mp3");
+    
 }
 void fullscream(){
      if(full){
@@ -615,6 +626,6 @@ int main(int argc, char *argv[]){
     glutMouseFunc(mouseClicks);
     glutTimerFunc(0, atualizaFPS, 0);
     setup();
-     glewInit();
+    glewInit();
     glutMainLoop();
 }
