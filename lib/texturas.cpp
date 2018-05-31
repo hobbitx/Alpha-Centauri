@@ -4,6 +4,8 @@
 void carregaTextura(){
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glEnable(GL_BLEND );
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     // Carrega a textura
     sunTexture = SOIL_load_OGL_texture(
@@ -85,6 +87,18 @@ void carregaTextura(){
     );
 
     if(deathTexture == 0){
+       cout << "Problema ao carregar textura: " << SOIL_last_result() << endl;
+    }
+
+
+    atmosferaTextura = SOIL_load_OGL_texture(
+       "../imagens/atmosfera.jpg",
+       SOIL_LOAD_AUTO,
+       SOIL_CREATE_NEW_ID,
+       SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+    );
+
+    if(atmosferaTextura == 0){
        cout << "Problema ao carregar textura: " << SOIL_last_result() << endl;
     }
 }

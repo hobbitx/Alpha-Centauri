@@ -19,7 +19,9 @@ int volume_musica=100;
 Mix_Music *musicMenu=NULL;
 
 static bool light0Ligada = 1; 
-static bool localViewer = false;            
+static bool localViewer = false;   
+float mundo = 5000;
+float sky=1000;     
 static float d = 1;           // Intensidade da cor difusa da luz branca
 static float e = 1;           // Intensidade da cor especular da luz branca
 static float m = 0.3;           // Intensidade da luz ambiente global
@@ -32,7 +34,7 @@ const int qtdPlanetas=5;
 coords olhoCamera,centroCamera,upCamera,mouse,mousef;
 material gasoso,rochoso, congelado,silver;
 float distancia_cameraX=1,distancia_cameraZ=1;
-float velocidadeTrans=0,tamanhoSol=3.2,fps;
+float velocidadeTrans=0,tamanhoSolReal=1390000,tamanhoSol,fps;
 int texturas[qtdPlanetas];
 material mats[qtdPlanetas];
 char musicas[5][50]={"../musicas/1.mp3","../musicas/2.mp3",
@@ -58,6 +60,49 @@ void parar_musica(){
 	if(Mix_PlayingMusic()){
 		Mix_FadeOutMusic(0);
 	}
+}
+void realidade(){
+       int i=0;
+    if(real==true){
+     
+        for(i= 0;i<=qtdPlanetas;i++){
+            tamanhoSol=tamanhoSolReal*escalaS;
+            distanciaX[i]=(distanciaReal[i])*escalaD+(2*tamanhoSol);
+            distanciaZ[i]=distanciaX[i]+1;
+            tamanho[i]=tamanhoReal[i]*escalaT;
+            sky=1000;
+            mundo=5000;
+        }
+
+    velocidadeTrans=velocidadeTranslacao[c_planeta];
+    distancia_cameraX=distanciaX[c_planeta]+(tamanho[c_planeta]*3.7);
+    distancia_cameraZ=distanciaZ[c_planeta]+(tamanho[c_planeta]*3.7);
+    if (c_planeta==0){
+       distancia_cameraX=distanciaX[c_planeta]+(tamanho[c_planeta]*5);
+       distancia_cameraZ=distanciaZ[c_planeta]+(tamanho[c_planeta]*5);
+    }
+
+    }else{
+         tamanhoSol=3.2;
+         
+        for(i= 0;i<=qtdPlanetas;i++){
+          
+            distanciaX[i]=tamanhoSol+5+(i*1.5);
+            distanciaZ[i]=distanciaX[i]+1.5;
+            tamanho[i]=(1+i)/10.0;
+            //printf("%2.2f ",tamanho[i]);
+            sky=50;
+            mundo=200;
+        }
+        velocidadeTrans=velocidadeTranslacao[c_planeta];
+        distancia_cameraX=distanciaX[c_planeta]+(tamanho[c_planeta]*4.7);
+        distancia_cameraZ=distanciaZ[c_planeta]+(tamanho[c_planeta]*4.7);
+        if (c_planeta==0){
+        distancia_cameraX=distanciaX[c_planeta]+(2*tamanho[c_planeta]*7.0);
+        distancia_cameraZ=distanciaZ[c_planeta]+(2*tamanho[c_planeta]*7.0);
+        }
+
+    }
 }
 void aneis(){
     int i=0;
@@ -97,23 +142,27 @@ void orbitas(){
     glPopMatrix();
 }
 void plano(){
+    float aumento =1;
+    if(real==true){
+        aumento=10;
+    }
    glPushMatrix(); 
         glColor3f(1,1,1);
         glTranslatef(0,0,0);
         glLineWidth(1);
-        for(float c=-100;c<100;c+=0.5){
+        for(float c=-mundo;c<mundo;c+=aumento){
             glPushMatrix(); 
                 glTranslatef(0, 0, c); 
                 glBegin(GL_LINES);
-                    glVertex3f(-200,0,0);
-                    glVertex3f(200,0,0);
+                    glVertex3f(-mundo,0,0);
+                    glVertex3f( mundo,0,0);
                 glEnd();
             glPopMatrix();   
             glPushMatrix(); 
                 glTranslatef(c, 0, 0); 
                     glBegin(GL_LINES);
-                    glVertex3f(0,0,-200);
-                    glVertex3f(0,0,200);
+                    glVertex3f(0,0,-mundo);
+                    glVertex3f(0,0, mundo);
                 glEnd();
             glPopMatrix();  
         }
@@ -122,6 +171,8 @@ void plano(){
 
 // Configuração inicial do OpenGL e GLUT
 void setup(void){
+    realidade();
+
     glClearColor(0,0,0, 0.0);
     glEnable(GL_DEPTH_TEST);                        // Ativa teste Z
     iniciar_musica("../musicas/space.mp3");
@@ -158,7 +209,7 @@ void setup(void){
     mats[3]=silver;
     mats[4]=gasoso;
 
-    olhoCamera.x=1;olhoCamera.y=5;olhoCamera.z=12;
+    olhoCamera.x=250;olhoCamera.y=100;olhoCamera.z=250;
     centroCamera.x=0;centroCamera.y=0;centroCamera.z=0;
     upCamera.x=0;upCamera.y=1;upCamera.z=0;
     glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, matAmbAndDif);
@@ -255,6 +306,7 @@ void planetas(){
             if(i==0) luas(0);
             if(i==3) luas(1);
             if(i==2) aneis();
+
         glPopMatrix();
         
         
@@ -290,7 +342,28 @@ void deathStart(){
 }
 // Callback de desenho
 void desenhaCena(){
-    
+    realidade();
+    if (camera==2){   
+        olhoCamera.x=-cos(anguloEsferaY*velocidadeTranslacao[1])*sateliteX*zoom;
+        olhoCamera.z=-sin(anguloEsferaY*velocidadeTranslacao[1])*sateliteZ*zoom;
+        olhoCamera.y=1;
+        centroCamera.x=-cos(anguloEsferaY*velocidadeTranslacao[1])*sateliteX*0.4;
+        centroCamera.z=-sin(anguloEsferaY*velocidadeTranslacao[1])*sateliteZ*0.4;
+        upCamera.x=0;
+        upCamera.y=1;
+        upCamera.z=0;
+
+       if (zoom>2)zoom=2;
+       if (zoom<1)zoom=1;
+    }
+    if(c_planeta<5 && controlaTardis==1){
+       upCamera.x=0;
+       upCamera.y=1;
+       upCamera.z=0;
+       olhoCamera.x=-cos(anguloEsferaY*velocidadeTrans)*distancia_cameraX;
+       olhoCamera.z=-sin(anguloEsferaY*velocidadeTrans)*distancia_cameraZ;
+       olhoCamera.y=0;  
+    }
     // Propriedades das fontes de luz
     // Propriedades da fonte de luz LIGHT0
     glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmb);
@@ -308,7 +381,7 @@ void desenhaCena(){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glLoadIdentity();
-    if (c_planeta<5){
+    if (c_planeta<qtdPlanetas){
        info_planeta();
     }
 
@@ -324,7 +397,7 @@ void desenhaCena(){
        glEnable(GL_TEXTURE_2D);
        glBindTexture(GL_TEXTURE_2D, spaceTexture);
        glRotatef(anguloPlaneta*0.009,1,0,0);
-       solidSphere(50,esferaLados,esferaLados);
+       solidSphere(sky,esferaLados,esferaLados);
        glDisable(GL_TEXTURE_2D);
     glPopMatrix();
    
@@ -352,27 +425,6 @@ void desenhaCena(){
     planetas();
     deathStart();
 
-    if (camera==2){   
-        olhoCamera.x=-cos(anguloEsferaY*velocidadeTranslacao[1])*sateliteX*zoom;
-        olhoCamera.z=-sin(anguloEsferaY*velocidadeTranslacao[1])*sateliteZ*zoom;
-        olhoCamera.y=1;
-        centroCamera.x=-cos(anguloEsferaY*velocidadeTranslacao[1])*sateliteX*0.4;
-        centroCamera.z=-sin(anguloEsferaY*velocidadeTranslacao[1])*sateliteZ*0.4;
-        upCamera.x=0;
-        upCamera.y=1;
-        upCamera.z=0;
-
-       if (zoom>2)zoom=2;
-       if (zoom<1)zoom=1;
-    }
-    if(c_planeta<5 && controlaTardis==1){
-       upCamera.x=0;
-       upCamera.y=1;
-       upCamera.z=0;
-       olhoCamera.x=-cos(anguloEsferaY*velocidadeTrans)*distancia_cameraX;
-       olhoCamera.z=-sin(anguloEsferaY*velocidadeTrans)*distancia_cameraZ;
-       olhoCamera.y=0;  
-    }
     fps = 1000.0f / MAX(delta, 1.0f);
     momentoAnterior = momentoAtual;
     if(inicioT>=fimTardis && controlaTardis==0){
@@ -386,31 +438,51 @@ void desenhaCena(){
    glutSwapBuffers();
 }
 void changeCamera(){
-    parar_musica();
+    if(c_planeta<6)  parar_musica();
+    iniciar_musica("../musicas/space.mp3");
     centroCamera.x=0;
     centroCamera.y=0;
     centroCamera.z=0;
     upCamera.x=0;
     upCamera.y=1;
     upCamera.z=0;
-    if (camera>4){
-        camera=1;
-    }
-    if (camera==1){
-        olhoCamera.x = 1;
-        olhoCamera.y = 5;
-        olhoCamera.z = 12; 
-    }else if(camera==2){
-        olhoCamera.y=1;
-        sateliteZ=distanciaZ[1]+1;
-        sateliteX=distanciaX[1]+1;
-    }else if (camera==3){
-        olhoCamera.x = 0.3;
-        olhoCamera.y = 21.5;
-        olhoCamera.z = 0.3;
+    if(real==true){
+        if (camera>4){
+            camera=1;
+        }
+        if (camera==1){
+            olhoCamera.x = 250;
+            olhoCamera.y = 100;
+            olhoCamera.z = 250; 
+        }else if(camera==2){
+            olhoCamera.y=1;
+            sateliteZ=distanciaZ[1]+1;
+            sateliteX=distanciaX[1]+1;
+        }else if (camera==3){
+            olhoCamera.x = 30;
+            olhoCamera.y = 300;
+            olhoCamera.z = 30;
+        }
+    }else{
+         if (camera>4){
+            camera=1;
+        }
+        if (camera==1){
+            olhoCamera.x = 1;
+            olhoCamera.y = 5;
+            olhoCamera.z = 12; 
+        }else if(camera==2){
+            olhoCamera.y=1;
+            sateliteZ=distanciaZ[1]+1;
+            sateliteX=distanciaX[1]+1;
+        }else if (camera==3){
+            olhoCamera.x = 0.3;
+            olhoCamera.y = 21.5;
+            olhoCamera.z = 0.3;
+        }
     }
     c_planeta=6;
-    iniciar_musica("../musicas/space.mp3");
+    
 }
 void changePlanet(){
     parar_musica();
@@ -472,13 +544,18 @@ void keyInput(unsigned char key, int x, int y){
     case'P':
         PlanOn = !PlanOn;
         break;
+    case 'R':
+    case 'r':
+        real=!real;
+       
+        break;    
     case 32: //espaço
         c_planeta++;
         changePlanet();
         break;
     case '+':
         if (camera==4){
-            olhoCamera.y+=0.1;
+            olhoCamera.y+=10.1;
         }
         if (camera==2){
             zoom+=0.1;
@@ -486,7 +563,7 @@ void keyInput(unsigned char key, int x, int y){
         break;
     case '-':
         if (camera==4){
-            olhoCamera.y-=0.1;
+            olhoCamera.y-=10.1;
         }
         if (camera==2){
             zoom-=0.1;
@@ -535,7 +612,7 @@ void resize(int w, int h){
     glViewport (0, 0, w, h);
     glMatrixMode (GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective(100.0, (float)w/(float)h, 1.0, 200.0); 
+    gluPerspective(100.0, (float)w/(float)h, 1.0, mundo); 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 }
@@ -556,8 +633,13 @@ void plan(int op){
     if(op==0) PlanOn = false;
     if(op==1) PlanOn = true;
 }
+void fulls(int op){
+    if(op==0) full = false;
+    if(op==1) full = true;
+    fullscream();
+}
 void CriaMenu() {
-    int menu,submenu1,submenu2,submenu3,submenu4;
+    int menu,submenu1,submenu2,submenu3,submenu4,submenu5;
     int i;
     submenu1 = glutCreateMenu(MenuPlaneta);
     for(i=0;i<qtdPlanetas;i++){
@@ -575,19 +657,21 @@ void CriaMenu() {
      glutAddMenuEntry("Desligado",0);
      glutAddMenuEntry("Ligado",1);
 
+    submenu5 = glutCreateMenu(fulls);
+     glutAddMenuEntry("Desligado",0);
+     glutAddMenuEntry("Ligado",1);
+
     menu = glutCreateMenu(MenuPrincipal);
     glutAddSubMenu("Planetas",submenu1);
     glutAddSubMenu("Iluminacao",submenu2);
     glutAddSubMenu("Orbitas",submenu3);
     glutAddSubMenu("Plano",submenu4);
+    glutAddSubMenu("Fullscream",submenu5);
     
     glutAttachMenu(GLUT_RIGHT_BUTTON);
 }
 void mouseClicks(int button, int state, int x, int y){
-    if(button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
-        c_planeta++;
-        changePlanet();
-    } 
+    
     if (button == GLUT_RIGHT_BUTTON)
         if (state == GLUT_DOWN) 
             CriaMenu();

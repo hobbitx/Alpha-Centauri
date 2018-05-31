@@ -12,7 +12,7 @@
 
 
 static long font = (long)GLUT_BITMAP_TIMES_ROMAN_10;   // Fonte usada para imprimir na tela
-
+static long fonte_planeta= (long)GLUT_BITMAP_HELVETICA_12;
 
 void escreveTextoNaTela(void *font, char *string);
 void floatParaString(char * destStr, int precision, float val);

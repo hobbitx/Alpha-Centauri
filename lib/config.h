@@ -33,14 +33,16 @@ typedef struct material {
 } material;
 extern int controlaTardis;
 extern float inicioT,fimTardis;
-extern float escala;
+extern float escalaD;
 extern bool OrbsOn;
 extern bool PlanOn;
 extern bool infoOn;
-extern bool full; 
+extern bool full;
+extern bool real;
 extern bool isLightingOn;
+extern float escalaT,escalaS;
 extern float zoom,tempo,sateliteX,sateliteZ,larguraJanela, alturaJanela;
-extern int p1,sunTexture,p2,p3,p4,p5,spaceTexture,deathTexture; // TEXTURAS
+extern int p1,sunTexture,p2,p3,p4,p5,spaceTexture,deathTexture,atmosferaTextura,moon1,moon2; // TEXTURAS
 extern int camera,c_planeta;
 extern char theStringBuffer[10]; 
 extern float gravidade[];
@@ -49,7 +51,9 @@ extern float temperatura[];
 extern char nomes[5][10];
 extern char materia[5][10];
 /*PLANETAS */
+extern float tamanhoReal[] ;
 extern float tamanho[] ;
+extern float distanciaReal[];
 extern float distanciaX[];
 extern float distanciaZ[] ;
 extern float velocidadeTranslacao[];
