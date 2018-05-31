@@ -78,3 +78,19 @@ No modo camêra 1 aperte as setas para movimentar a camera
 * **Robert Cristiam** 
 * **Matheus Marçal** 
 
+## Itens implementados:
+
+*Skybox - Foi usado uma skyshpere conforme a instrução do professor
+*Modo de órbitas visivies - Completo incluindo orbitas de astros.
+*Plano orbital - plano completo 
+*Orbitas não circulares - orbitas totalmente elípticas.
+*Orbitas não coplanares - Alguns objetos possuem orbitas diferenciadas dos demais.
+*Anéis - Um objeto possuem um pequeno anel a sua volta.
+*Tour entre objetos - Implementado
+*Animação do deslocamento - Não implementado porem a um efeito sono que simula a viagem que a nave do observador faz ( efeito da tardis - Doctor Who).
+*Escrever na tela dados - Feito.
+*Reshape - feito
+*Musica - feito
+*Fidedignidade - Foi usado esquemas reais com uma escala definida , porém o sistema não retrara o sistema solar , as medidas são reais porem os nomes e planetas não.
+*Modo fullscreen - Modo de preenchimento da tela toda foi implementado 
+*Menu no mouse- um menu foi criado ao pressionar a tecla direita do mouse com diversa opções.
