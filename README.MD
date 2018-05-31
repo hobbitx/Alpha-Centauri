@@ -2,7 +2,7 @@
 
 Este projeto realiza a implementação de conhecimentos adquiridos na segunda parte da matéria de computação gráfica do curso de engenharia de computação do CEFET-MG. Neste exemplo implementamos um modelo em 3D de um sistema estelar.
 As medidades presentes neste modelo são baseadas nas medidas reais do sistema solar, disponiveis em: http://planetario.ufsc.br/o-sistema-solar/.
-Data de acesso:30 de maio de 2018 ás 15:29;
+Data de acesso: 30 de maio de 2018 ás 15:29;
 ## Começando
 
 ```
