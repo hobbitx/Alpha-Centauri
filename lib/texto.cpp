@@ -102,14 +102,21 @@ void informacoes(coords olhoCamera,coords centroCamera,coords upCamera ){
 
 }
 void info_planeta(){
-    float perimetro = 2*3.14* sqrt((pow(distanciaReal[c_planeta],2)+
-    pow(distanciaReal[c_planeta],2)/2));
-    glDisable(GL_LIGHTING); // Desabilita iluminação
+    float a = (float) pow(distanciaReal[1],2);
+    float b = (float) pow(distanciaReal[1]+10,2);
+    float c = sqrt((a+b)/2);
+    float padrao = 2*3.1415*c;
+    float parcela_a = (float) pow(distanciaReal[c_planeta],2);
+    float parcela_b = (float) pow((distanciaReal[c_planeta]+10),2);
+    float parcela_c = sqrt((parcela_a+parcela_b)/2);
+    float perimetro = ((2*3.1415*parcela_c)/padrao);
+
+    glDisable(GL_LIGHTING);
     glColor3f(.85f, .85f, .85f);
 
     glRasterPos3f(2.0, 1.60, -2.6);
     escreveTextoNaTela((void*)fonte_planeta, (char*)"Nome:");
-    escreveTextoNaTela((void*)fonte_planeta,nomes[c_planeta]);
+    escreveTextoNaTela((void*)fonte_planeta, nomes[c_planeta]);
 
     glRasterPos3f(2.0, 1.45, -2.6);
     escreveTextoNaTela((void*)fonte_planeta, (char*)"Distancia:");
@@ -148,7 +155,7 @@ void info_planeta(){
     
     glRasterPos3f(2.0, 0.55, -2.6);
     escreveTextoNaTela((void*)fonte_planeta, (char*)"Periodo orbital:"); 
-    floatParaString(theStringBuffer, 4, perimetro);
+    floatParaString(theStringBuffer, 5, perimetro);
     escreveTextoNaTela((void*)fonte_planeta, theStringBuffer);
     escreveTextoNaTela((void*)fonte_planeta, (char*)"Anos");
 

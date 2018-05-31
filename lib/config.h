@@ -42,14 +42,12 @@ extern bool real;
 extern bool isLightingOn;
 extern float escalaT,escalaS;
 extern float zoom,tempo,sateliteX,sateliteZ,larguraJanela, alturaJanela;
-extern int p1,sunTexture,p2,p3,p4,p5,spaceTexture,deathTexture,atmosferaTextura,moon1,moon2; // TEXTURAS
+/* TEXTURAS */
+extern int p1,sunTexture,p2,p3,p4,p5,spaceTexture,deathTexture,atmosferaTextura;
+extern int moon1,moon2,moon3; 
 extern int camera,c_planeta;
 extern char theStringBuffer[10]; 
-extern float gravidade[];
-extern float massa[];
-extern float temperatura[];
-extern char nomes[5][10];
-extern char materia[5][10];
+
 /*PLANETAS */
 extern float tamanhoReal[] ;
 extern float tamanho[] ;
@@ -57,5 +55,9 @@ extern float distanciaReal[];
 extern float distanciaX[];
 extern float distanciaZ[] ;
 extern float velocidadeTranslacao[];
-
+extern float gravidade[];
+extern float massa[];
+extern float temperatura[];
+extern char nomes[5][10];
+extern char materia[5][10];
 #endif // CONFIGURACOES_H

@@ -36,9 +36,10 @@ material gasoso,rochoso, congelado,silver;
 float distancia_cameraX=1,distancia_cameraZ=1;
 float velocidadeTrans=0,tamanhoSolReal=1390000,tamanhoSol,fps;
 int texturas[qtdPlanetas];
+int moons[qtdPlanetas];
 material mats[qtdPlanetas];
 char musicas[5][50]={"../musicas/1.mp3","../musicas/2.mp3",
-"../musicas/3.mp3"};
+"../musicas/3.mp3","../musicas/4.mp3","../musicas/5.mp3",};
 /*ILUMINACAO*/
 float lightAmb[] = { 0.0, 0.0, 0.0, 1.0 };
 float lightDif0[] = { d, d, d, 1.0 };
@@ -222,7 +223,9 @@ void setup(void){
     texturas[2] = p3;
     texturas[3] = p4;
     texturas[4] = p5;
-   
+    moons[0]=moon1;
+    moons[1]=moon2;
+    moons[2]=moon3;
     glCullFace(GL_FRONT_AND_BACK);
     
 }
@@ -234,9 +237,9 @@ void solidSphere(float radius, int stacks, int columns){
    gluSphere(quadObj, radius, stacks, columns);
    gluDeleteQuadric(quadObj);
 }
-void luas(int tipo){
-    int f;
-   // glBindTexture(GL_TEXTURE_2D,texturas[f]);
+void luas(int tipo,int text){
+ 
+   glBindTexture(GL_TEXTURE_2D,moons[text]);
    if(tipo==1){
     glPushMatrix();
         //glTranslatef(0,1,0);
@@ -287,9 +290,10 @@ void luas(int tipo){
     glPopMatrix();
    }
     glEnable(GL_LIGHTING);
-    //glDisable(GL_TEXTURE_2D);
+   
 }
 void planetas(){
+    int f=0;
     sateliteZ=distanciaZ[1]+1.4;
     sateliteX=distanciaX[1]+1.4;
     for (int i = 0; i < qtdPlanetas; i++){
@@ -302,11 +306,11 @@ void planetas(){
             glTranslatef(-cos(anguloEsferaY*velocidadeTranslacao[i])*distanciaX[i],0,-sin(anguloEsferaY*velocidadeTranslacao[i])*distanciaZ[i]);//movimento de translação
             glRotatef(anguloPlaneta, 0, 1, 0); //movimento de rotação
             solidSphere(tamanho[i], esferaLados, esferaLados);
-            if(i==4) luas(1);
-            if(i==0) luas(0);
-            if(i==3) luas(1);
+            if(i==4) luas(1,f);
+            if(i==0) luas(0,f);
+            if(i==3) luas(1,f);
             if(i==2) aneis();
-
+            f++;
         glPopMatrix();
         
         
@@ -363,6 +367,8 @@ void desenhaCena(){
        olhoCamera.x=-cos(anguloEsferaY*velocidadeTrans)*distancia_cameraX;
        olhoCamera.z=-sin(anguloEsferaY*velocidadeTrans)*distancia_cameraZ;
        olhoCamera.y=0;  
+    }else{ 
+        iniciar_musica("../musicas/space.mp3");
     }
     // Propriedades das fontes de luz
     // Propriedades da fonte de luz LIGHT0
@@ -433,8 +439,7 @@ void desenhaCena(){
         iniciar_musica(musicas[c_planeta]);
     }else{
         inicioT+=0.1;
-    }
-    //printf("%.2f ",inicioT);
+    };
    glutSwapBuffers();
 }
 void changeCamera(){
@@ -464,7 +469,7 @@ void changeCamera(){
             olhoCamera.z = 30;
         }
     }else{
-         if (camera>4){
+         if (camera>3){
             camera=1;
         }
         if (camera==1){
@@ -508,7 +513,7 @@ void changePlanet(){
     iniciar_musica("../musicas/tardis.mp3");
     
 }
-void fullscream(){
+void fullscreen(){
      if(full){
         glutFullScreen(); 
     }else{
@@ -538,7 +543,7 @@ void keyInput(unsigned char key, int x, int y){
     case'f':
     case'F':
         full = !full;
-        fullscream();
+        fullscreen();
         break;
     case'p':
     case'P':
@@ -547,7 +552,8 @@ void keyInput(unsigned char key, int x, int y){
     case 'R':
     case 'r':
         real=!real;
-       
+        if(c_planeta==6)changeCamera();
+        else{ changePlanet();}
         break;    
     case 32: //espaço
         c_planeta++;
@@ -636,10 +642,14 @@ void plan(int op){
 void fulls(int op){
     if(op==0) full = false;
     if(op==1) full = true;
-    fullscream();
+    fullscreen();
+}
+void reals(int op){
+    if(op==1) real = true;
+    if(op==1) real = false;
 }
 void CriaMenu() {
-    int menu,submenu1,submenu2,submenu3,submenu4,submenu5;
+    int menu,submenu1,submenu2,submenu3,submenu4,submenu5,submenu6;
     int i;
     submenu1 = glutCreateMenu(MenuPlaneta);
     for(i=0;i<qtdPlanetas;i++){
@@ -661,13 +671,17 @@ void CriaMenu() {
      glutAddMenuEntry("Desligado",0);
      glutAddMenuEntry("Ligado",1);
 
+    submenu6 = glutCreateMenu(reals);
+    glutAddMenuEntry("Real",0);
+     glutAddMenuEntry("Fantasia",1);
+   
     menu = glutCreateMenu(MenuPrincipal);
     glutAddSubMenu("Planetas",submenu1);
-    glutAddSubMenu("Iluminacao",submenu2);
-    glutAddSubMenu("Orbitas",submenu3);
-    glutAddSubMenu("Plano",submenu4);
-    glutAddSubMenu("Fullscream",submenu5);
-    
+    glutAddSubMenu("Iluminacao (l)",submenu2);
+    glutAddSubMenu("Orbitas (o)",submenu3);
+    glutAddSubMenu("Plano (p)",submenu4);
+    glutAddSubMenu("fullscreen (f)",submenu5);
+    glutAddSubMenu("Modo (r)",submenu6);
     glutAttachMenu(GLUT_RIGHT_BUTTON);
 }
 void mouseClicks(int button, int state, int x, int y){
@@ -691,12 +705,24 @@ void atualizaFPS(int idx) {
     char tituloDaJanela[200];
     sprintf(tituloDaJanela,"ALPHA CENTAURI-II  (%.2f fps)",fps);
     glutSetWindowTitle(tituloDaJanela);
-    glutTimerFunc(1000, atualizaFPS, 0);
+    glutTimerFunc(66, atualizaFPS, 0);
+}
+void comandos(){
+    printf("Aperte c para mudar a camêra \n");
+    printf("Aperte space para viajar até os planetas\n");
+    printf("Aperte l para habilitar ou desabilitar iluminação\n");
+    printf("Aperte o para visualizar as orbitas\n");
+    printf("Aperte p para visualizar o plano \n");
+    printf("Aperte f para alternar entre fullscreen \n");
+    printf("Aperte r para mudar entre os modos de realidade e fantasia\n");
+    printf("Botão direito abre um menu com estas mesmas opções\n");
+    printf("no modo camêra 1 aperte as setas para movimentar a camera \n");
+    
 }
 int main(int argc, char *argv[]){
-
+comandos();
     glutInit(&argc, argv);
-
+    
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
     glutInitWindowSize(800, 600);
     glutInitWindowPosition (100, 100);

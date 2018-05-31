@@ -91,14 +91,35 @@ void carregaTextura(){
     }
 
 
-    atmosferaTextura = SOIL_load_OGL_texture(
-       "../imagens/atmosfera.jpg",
+    moon1 = SOIL_load_OGL_texture(
+       "../imagens/moon1.jpg",
        SOIL_LOAD_AUTO,
        SOIL_CREATE_NEW_ID,
        SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
     );
 
-    if(atmosferaTextura == 0){
+    if(moon1 == 0){
+       cout << "Problema ao carregar textura: " << SOIL_last_result() << endl;
+    }
+     moon2 = SOIL_load_OGL_texture(
+       "../imagens/moon2.png",
+       SOIL_LOAD_AUTO,
+       SOIL_CREATE_NEW_ID,
+       SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+    );
+
+    if(moon2 == 0){
+       cout << "Problema ao carregar textura: " << SOIL_last_result() << endl;
+    }
+
+     moon3 = SOIL_load_OGL_texture(
+       "../imagens/moon3.jpg",
+       SOIL_LOAD_AUTO,
+       SOIL_CREATE_NEW_ID,
+       SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+    );
+
+    if(moon3 == 0){
        cout << "Problema ao carregar textura: " << SOIL_last_result() << endl;
     }
 }

@@ -14,7 +14,7 @@ float inicioT=0,fimTardis=10;
 float zoom=1,tempo,sateliteX,sateliteZ,larguraJanela, alturaJanela;
 char theStringBuffer[10]; 
 int p1=0,p2=0,p3=0,p4=0,p5=0,sunTexture=0,spaceTexture=0,deathTexture=0,atmosferaTextura=0; // TEXTURAS
-int moon1=0,moon2=0;
+int moon1=0,moon2=0,moon3=0;
 int camera=1,c_planeta=6;
 float gravidade[] = {0.5,0.3,0.1,0.09,0.025 };
 float massa[] = {0.55,0.81,1.2,14.0,37.0 };
