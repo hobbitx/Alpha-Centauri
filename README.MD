@@ -49,13 +49,21 @@ Nesta seção será apresentado todo o funcionamento após a compilação.
 
 ### Comandos
 Aperte c para mudar a camêra
+
 Aperte space para viajar até os planetas
+
 Aperte l para habilitar ou desabilitar iluminação
+
 Aperte o para visualizar as orbitas
+
 Aperte p para visualizar o plano 
-Aperte f para alternar entre fullscreen 
+
+Aperte f para alternar entre fullscreen
+
 Aperte r para mudar entre os modos de realidade e fantasia
+
 Botão direito abre um menu com estas mesmas opções
+
 No modo camêra 1 aperte as setas para movimentar a camera
 
 ## Compile
