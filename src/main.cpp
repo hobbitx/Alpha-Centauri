@@ -78,6 +78,7 @@ void realidade(){
     velocidadeTrans=velocidadeTranslacao[c_planeta];
     distancia_cameraX=distanciaX[c_planeta]+(tamanho[c_planeta]*3.7);
     distancia_cameraZ=distanciaZ[c_planeta]+(tamanho[c_planeta]*3.7);
+
     if (c_planeta==0){
        distancia_cameraX=distanciaX[c_planeta]+(tamanho[c_planeta]*5);
        distancia_cameraZ=distanciaZ[c_planeta]+(tamanho[c_planeta]*5);
@@ -99,8 +100,8 @@ void realidade(){
         distancia_cameraX=distanciaX[c_planeta]+(tamanho[c_planeta]*4.7);
         distancia_cameraZ=distanciaZ[c_planeta]+(tamanho[c_planeta]*4.7);
         if (c_planeta==0){
-        distancia_cameraX=distanciaX[c_planeta]+(2*tamanho[c_planeta]*7.0);
-        distancia_cameraZ=distanciaZ[c_planeta]+(2*tamanho[c_planeta]*7.0);
+            distancia_cameraX=distanciaX[c_planeta]+(2*tamanho[c_planeta]*7.0);
+            distancia_cameraZ=distanciaZ[c_planeta]+(2*tamanho[c_planeta]*7.0);
         }
 
     }
@@ -117,8 +118,12 @@ void aneis(){
                     angulo = 2 * 3.14 * i / 100;
                     glVertex3f(0,cos(angulo),sin(angulo) );
                     
-                    if(variante>=0.5) variante-=0.001;
-                    if(variante<=-0.5) variante+=0.001;
+                    if(variante>=0.5){ 
+                        variante-=0.001;
+                    }
+                    if(variante<=-0.5) {
+                        variante+=0.001;
+                    }
                 }
         glEnd();
     glPopMatrix();
@@ -135,7 +140,7 @@ void orbitas(){
                 glTranslatef(2, 2, 0);
                 for (i = 0; i <= 100; ++i) {
                     angulo = 2 * 3.14 * i / 100;
-                glVertex3f(cos(angulo) * distanciaX[c],1,sin(angulo) * distanciaZ[c]);
+                    glVertex3f(cos(angulo) * distanciaX[c],1,sin(angulo) * distanciaZ[c]);
                 }
             glEnd();
             i=0;
@@ -147,7 +152,7 @@ void plano(){
     if(real==true){
         aumento=10;
     }
-   glPushMatrix(); 
+    glPushMatrix(); 
         glColor3f(1,1,1);
         glTranslatef(0,0,0);
         glLineWidth(1);
@@ -213,6 +218,7 @@ void setup(void){
     olhoCamera.x=250;olhoCamera.y=100;olhoCamera.z=250;
     centroCamera.x=0;centroCamera.y=0;centroCamera.z=0;
     upCamera.x=0;upCamera.y=1;upCamera.z=0;
+
     glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, matAmbAndDif);
     glMaterialfv(GL_FRONT, GL_SPECULAR, matSpec);
     glMaterialfv(GL_FRONT, GL_SHININESS, matShine);
@@ -259,7 +265,7 @@ void luas(int tipo,int text){
             glTranslatef(2, 2, 0);
                 for (i = 0; i <= 100; i++) {
                     angulo = 2 * 3.14 * i / 100;
-                glVertex3f(cos(angulo),1 ,sin(angulo) );
+                    glVertex3f(cos(angulo),1 ,sin(angulo) );
                 }
         glEnd();
     }
@@ -622,7 +628,9 @@ void resize(int w, int h){
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 }
-void MenuPrincipal(int op){}
+void MenuPrincipal(int op){
+
+}
 void MenuPlaneta(int op){
     c_planeta=op;
      changePlanet();
@@ -686,10 +694,11 @@ void CriaMenu() {
 }
 void mouseClicks(int button, int state, int x, int y){
     
-    if (button == GLUT_RIGHT_BUTTON)
-        if (state == GLUT_DOWN) 
+    if (button == GLUT_RIGHT_BUTTON){
+        if (state == GLUT_DOWN) {
             CriaMenu();
-
+        }
+    }
 }
 
 void atualiza() {
@@ -720,7 +729,7 @@ void comandos(){
     
 }
 int main(int argc, char *argv[]){
-comandos();
+    comandos();
     glutInit(&argc, argv);
     
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
